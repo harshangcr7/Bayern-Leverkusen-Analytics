@@ -1,90 +1,64 @@
-# Databricks dbt Analytics Project
+# Football Analytics with StatsBomb Open Data
 
-## Overview
-End-to-end analytics project built using **dbt on Databricks**, following modern **Bronze → Silver → Gold** data architecture.
+This project performs **exploratory football analytics and visualization** using **event-based data** from **StatsBomb Open Data**.  
+The notebook focuses on understanding match events, shot outcomes, expected goals (xG), player performance, and passing structures using Python-based data analysis and visualization tools.
 
-The project uses a **CSV-based customer dataset** loaded into Databricks and models a retail domain including:
-- customers
-- sales
-- returns
-- products
-- stores
-- dates
+This is a **descriptive analytics project**.
 
-The final output is a **One Big Table (OBT)** designed for BI tools such as **Tableau** to analyze key business KPIs.
+---
 
-## Tech Stack
-- Databricks (Delta Lake)
-- dbt Core
-- SQL & Jinja
-- Git & GitHub
+## TL;DR (For Recruiters)
 
-## Key Features
-- Bronze–Silver–Gold modeling
-- SCD Type 2 using dbt snapshots
-- Reusable macros
-- Data quality tests
-- Secure handling of secrets via environment variables
-- Analytics-focused data modeling
+- Used **StatsBomb Open Data** to analyze football event data  
+- Performed **shot outcome and expected goals (xG) analysis**  
+- Identified **players overperforming and underperforming xG**  
+- Built **passing networks** using NetworkX  
+- Created tactical visualizations with **mplsoccer**  
+- Focused on **football insights and interpretation**  
 
-## Data Architecture
-CSV Source Files
-|
-v
-+----------------+
-| Bronze |
-| Raw Ingest |
-+----------------+
-|
-v
-+-----------------------------+
-| Silver |
-| - Deduplication |
-| - Type casting |
-| - Minor transformations |
-| - dbt snapshots (SCD 2) |
-+-----------------------------+
-|
-v
-+-------------------------------------+
-| Gold |
-| One Big Table (OBT) |
-| Analytics & BI-ready |
-+-------------------------------------+
+---
+
+## 📊 Data Source
+
+The analysis uses **StatsBomb Open Data**, accessed via the official Python client.
 
 
-## Layer Details
+##  Architecture & Workflow
 
-### Bronze
-- Raw ingestion of CSV data into Databricks
-- No business logic applied
-- Preserves original source structure
+- Data Ingestion
+  Fetch competitions, matches, and event data using statsbombpy
+  Load nested JSON into pandas DataFrames
+- Data Filtering
+  Select specific competitions and matches
+  Filter relevant event types (shots, passes)
+- Shot Analysis
+  Analyze shot outcomes
+  Compare goals vs expected goals (xG)
+- Visualize shot locations
+  xG-Based Player Evaluation
+  Aggregate xG and goals at player level
+  Identify overperformers and underperformers
+  Passing Network Analysis
+  Construct passing graphs using networkx
+  Visualize team passing structure
+  Identify central players in buildup play
+- Visualization
+  Shot maps
+  Distribution plots
+  Passing networks
+  Tactical diagrams using mplsoccer
 
-### Silver
-- Cleans and standardizes Bronze data
-- Deduplication and minor transformations
-- **dbt snapshot implemented on Customers table**
-  - Tracks historical changes (Slowly Changing Dimension Type 2)
 
-### Gold
-- Builds a **One Big Table (OBT)**
-- Combines customers, sales, returns, products, stores, and dates
-- Optimized for BI tools and KPI analysis
+## Key Insights
 
+- Expected goals (xG) provides a more informative measure of shot quality than raw goals
+- Some players consistently outperform or underperform xG, indicating finishing variance or skill
+- Passing networks reveal structural and tactical patterns not visible in summary statistics
 
-## Running the Project
+## Install all required libraries.
 
-This project is designed to run on **Databricks**.
-
-To execute the models, the following environment variables are required:
-
-- `DATABRICKS_HOST`
-- `DATABRICKS_TOKEN`
-
-> Credentials are intentionally **not committed** to the repository for security reasons.
-
-Once configured, run:
-
-```bash
-dbt build
+- Open FootballAnalytics.ipynb in Jupyter Notebook or JupyterLab.
+- Run the notebook top to bottom in sequence.
+- Initial data loading can take 10–15 minutes, as event data is fetched from the StatsBomb API.
+- Subsequent analysis and visualization steps execute quickly.
 
